@@ -1,1 +1,1 @@
-# FlipKart
+Full stack clone project of FlipKart
