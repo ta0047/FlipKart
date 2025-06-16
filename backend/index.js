@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import cors from 'cors'
 import { connectDB } from './database/connectDB.js';
+import { errorMiddleware } from './Middlewares/ErrorsMiddlewares.js';
 dotenv.config()
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -19,6 +20,7 @@ app.use(urlencoded({extended:true}))
 
 connectDB();
 
-app.listen(PORT,()=>{
+app.listen(PORT, ()=>{
     console.log(`server is running on port ${PORT}`);
 })
+app.use(errorMiddleware)
