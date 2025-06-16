@@ -20,21 +20,24 @@ export const register = catchAsyncError(async (req, res, next) => {
             email,
             accountVerified: false
         });
-        if( registerAttempt.length > 3) {
-            return next(new ErrorHandler("Number of Attemps exausted Contact Support ", 400));
+        
+        if( registerAttempt.length >= 3) {
+            return next(new ErrorHandler("Number of Attempts exhausted Contact Support ", 400));
         }
+
         if(password.length < 6 || password.length > 16) {
             return next(new ErrorHandler("Password must be between 6 and 16 characters", 400));
         }
+
         const hashedpassword = await bcrypt.hash(password, 10);
         const user = await User.create({
             name,
             email,
             password: hashedpassword,
         });
-        const verificationToken = await user.generateVerificationToken();
+        const verificationCode = await user.generateVerificationCode();
         await user.save();
-        sendVerificationToken(user, verificationToken, res);
+        sendVerificationCode(email, verificationCode, res);
     } catch (error) {
         return next(new ErrorHandler("Internal Server Error", 500));
     }

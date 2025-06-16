@@ -48,16 +48,18 @@ const userSchema = new mongoose.Schema({
     resetPasswordToken: String,
     resetPasswordExpire: Date,
 }, { timestamps: true });
-userSchema.methods.generateVerificationToken = function () {
-    function generateRandom5DigitCode() {
+
+userSchema.methods.generateVerificationCode = function () {
+    function generateRandom5DigitNumber() {
         const firstDigit = Math.floor(Math.random() * 9) + 1; 
-        const remainingDigits = Math.floor(Math.random() * 1000).toString().padStart(4, '0'); 
+        const remainingDigits = Math.floor(Math.random() * 1000).toString().padStart(4,0); 
 
         return parseInt(firstDigit + remainingDigits); 
     }
-        this.verificationCode = verificationCode
-        this.verificationCodeExpire = Date.now()+5 * 60 * 1000; // 5 minutes
-        return verificationCode;
+    const verificationCode = generateRandom5DigitNumber();
+    this.verificationCode = verificationCode;
+    this.verificationCodeExpire = Date.now() + 10 * 60 * 1000; // Code valid for 10 minutes
+        
 
 }
 
